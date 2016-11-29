@@ -6,6 +6,10 @@
         <label for='name'>File name:</label>
         <input id='name' type='text' v-model='name' autofocus>
       </div>
+      <div class='input-field'>
+        <label for='name'>Additional Fields (Comma Seperated):</label>
+        <input id='fields' type='text' v-model='fields'>
+      </div>
       <input type='submit' class='waves-effect waves-light btn col s12' value='Create new file' v-if='status === ""'/>
     </form>
 
@@ -42,7 +46,7 @@ export default {
   methods: {
     create() {
       this.status = 'saving';
-      createSpreadsheet(this.name).then(result => {
+      createSpreadsheet(this.name, this.fields).then(result => {
         this.status = '';
         const {spreadsheetId} = result;
         this.$router.go(`/time-log/${spreadsheetId}`);

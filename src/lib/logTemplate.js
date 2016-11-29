@@ -1,16 +1,16 @@
 /**
  * This is a template for the default spreadsheet.
  */
-export default function createLogTemplate(name) {
+export default function createLogTemplate(name, fields) {
   return {
     properties: {
       title: `${name}`,
     },
-    sheets: createTimeSheet('Time Log')
+    sheets: createTimeSheet('Time Log', fields)
   }
 }
 
-function createTimeSheet(title) {
+function createTimeSheet(title, fields) {
   return {
     properties: {
       title,
@@ -21,22 +21,25 @@ function createTimeSheet(title) {
         frozenColumnCount: 5,
       },
     },
-    data: [createHeaderRow()]
+    data: [createHeaderRow(fields)]
   };
 }
 
-function createHeaderRow() {
+function createHeaderRow(fields) {
+  const headers = [
+    header('Start'),
+    header('End'),
+    header('Duration')
+  ]
+
+  // add any custom fields
+  fields.split(',').forEach(field => headers.push(header(field)))
+
   return {
     startRow: 0,
     startColumn: 0,
     rowData: {
-      values: [
-        header('Start'),
-        header('End'),
-        header('Duration'),
-        header('Who?'),
-        header('What?')
-      ]
+      values: headers
     }
   };
 }
