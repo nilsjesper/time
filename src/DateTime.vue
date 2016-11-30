@@ -17,9 +17,7 @@ export default {
     const pickerConfig = {
       allowInput: true,
       enableTime: true,
-      time_24hr: true,
-      enableSeconds: true,
-      dateFormat: 'Y-m-dTH:i',
+      // dateFormat: 'Y-m-dTH:i',
       utc: false,
 
       onChange() {
