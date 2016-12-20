@@ -83,6 +83,11 @@ import getSpreadsheetIdFromComponentRoute from './lib/getSpreadsheetIdFromCompon
 import DateTime from './DateTime.vue';
 
 export default {
+  ready() {
+    setInterval(function () {
+      this.refreshRecords();
+    }.bind(this), 500);
+  },
   data() {
     return {
       recordsState: 'loading',

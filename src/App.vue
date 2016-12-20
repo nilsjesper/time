@@ -47,6 +47,7 @@ export default {
   ready() {
     // This is just something required by materialize-css to let side navigation work:
     $('.button-collapse').sideNav();
+
   },
   data() {
     return appModel;
