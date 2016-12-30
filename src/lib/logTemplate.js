@@ -6,7 +6,10 @@ export default function createLogTemplate(name) {
     properties: {
       title: `${name}`,
     },
-    sheets: createTimeSheet('Time Log')
+    sheets: [
+      createTimeSheet('Time Log'),
+      createTimeReport('Time Report'),
+    ]
   }
 }
 
@@ -16,16 +19,36 @@ function createTimeSheet(title) {
       title,
       gridProperties: {
         // We want the first row to be frozen
-        frozenRowCount: 1,
-        // And we need only first five columns (start/end/duration/who/what)
-        frozenColumnCount: 5,
+        frozenRowCount: 1
       },
     },
-    data: [createHeaderRow()]
+    data: [createLogHeaderRow()]
   };
 }
 
-function createHeaderRow() {
+function createTimeReport(title) {
+  return {
+    properties: {
+      title,
+      gridProperties: {
+        // We want the first row to be frozen
+        frozenRowCount: 1
+      },
+    },
+    data: [{
+      startRow: 0,
+      startColumn: 0,
+      rowData: {
+        values: [
+          formulaCell('=QUERY(\'Time Log\'!A:F,' +
+          ' "select F, sum(C) where F is not null group by F pivot upper(D)")'),
+        ]
+      }
+    }]
+  }
+}
+
+function createLogHeaderRow() {
   return {
     startRow: 0,
     startColumn: 0,
@@ -35,7 +58,8 @@ function createHeaderRow() {
         header('End'),
         header('Duration'),
         header('Who?'),
-        header('What?')
+        header('What?'),
+        formulaCell('=QUERY(A:A,"select toDate(A) label toDate(A) \'Date\'")')
       ]
     }
   };
@@ -53,4 +77,12 @@ function header(text) {
       },
     },
   };
+}
+
+function formulaCell(text) {
+  return {
+    userEnteredValue: {
+      formulaValue: text
+    }
+  }
 }
